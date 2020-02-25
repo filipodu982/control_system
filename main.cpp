@@ -3,10 +3,11 @@
 using namespace Eigen;
 
 int main() {
-    Vector4d x(3,4,5,6);
-    std::cout<<x<<std::endl;
-    DiagonalMatrix<double,4> m;
-    m.diagonal() = x;
-    std::cout << m.toDenseMatrix() << std::endl;
+    Matrix3d m1 = Matrix3d::Random();
+    MatrixXd m(6,6);
+    m = MatrixXd::Zero(6,6);
+    std::cout << m << std::endl;
+    m.block<3,3>(0,0) = m1;
+    std::cout << m << std::endl;
     return 0;
 }
