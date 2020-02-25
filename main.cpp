@@ -10,8 +10,7 @@ int main() {
     m = MatrixXd::Zero(6,6);
    // std::cout << m << std::endl;
     m.block<3,3>(0,0) = m1;
-    //std::cout << m << std::endl;
-    Vector3f vec (1.0,2.0,3.0);
-    std::cout << robot.Smtrx(vec) << std::endl;
+    robot.print_params();
+    //std::cout << robot.Smtrx(vec) << std::endl;
     return 0;
 }

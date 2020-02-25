@@ -10,12 +10,25 @@ using namespace Eigen;
 
 class ROV {
 private:
-    int m = 40;
-    float D = 0.3;
+    // Mass and inertia moments
+    int m;
+    float Ix, Iy, Iz;
+    float Ixy, Iyx, Ixz, Izx, Iyz, Izy;
+    Matrix3f Ib = Matrix3f::Zero(3,3);
 
+    Vector3f rg;
+
+    Matrix<float,6,6> Mrb;
+
+
+
+
+
+
+    static Matrix3f Smtrx(Vector3f r);
 public:
-    Matrix3f Smtrx(Vector3f r);
     void print_params();
+    ROV();
 };
 
 
