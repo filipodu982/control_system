@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/control_system.dir/ROV.cpp.obj"
   "CMakeFiles/control_system.dir/main.cpp.obj"
   "control_system.exe"
   "control_system.exe.manifest"

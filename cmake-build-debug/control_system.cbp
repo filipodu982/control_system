@@ -80,6 +80,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/filip/Desktop/control_system/ROV.cpp">
+			<Option target="control_system"/>
+		</Unit>
+		<Unit filename="C:/Users/filip/Desktop/control_system/ROV.h">
+			<Option target="control_system"/>
+		</Unit>
 		<Unit filename="C:/Users/filip/Desktop/control_system/main.cpp">
 			<Option target="control_system"/>
 		</Unit>

@@ -122,6 +122,33 @@ control_system/fast:
 	$(MAKE) -f CMakeFiles\control_system.dir\build.make CMakeFiles/control_system.dir/build
 .PHONY : control_system/fast
 
+ROV.obj: ROV.cpp.obj
+
+.PHONY : ROV.obj
+
+# target to build an object file
+ROV.cpp.obj:
+	$(MAKE) -f CMakeFiles\control_system.dir\build.make CMakeFiles/control_system.dir/ROV.cpp.obj
+.PHONY : ROV.cpp.obj
+
+ROV.i: ROV.cpp.i
+
+.PHONY : ROV.i
+
+# target to preprocess a source file
+ROV.cpp.i:
+	$(MAKE) -f CMakeFiles\control_system.dir\build.make CMakeFiles/control_system.dir/ROV.cpp.i
+.PHONY : ROV.cpp.i
+
+ROV.s: ROV.cpp.s
+
+.PHONY : ROV.s
+
+# target to generate assembly for a file
+ROV.cpp.s:
+	$(MAKE) -f CMakeFiles\control_system.dir\build.make CMakeFiles/control_system.dir/ROV.cpp.s
+.PHONY : ROV.cpp.s
+
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -158,6 +185,9 @@ help:
 	@echo ... control_system
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... ROV.obj
+	@echo ... ROV.i
+	@echo ... ROV.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
