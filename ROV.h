@@ -40,7 +40,10 @@ public:
     ROV();
     void print_params();
     VectorXf states = VectorXf::Zero(12);
-    Matrix<float,6,6> coriolis_matrix(VectorXf cur_state, Matrix<float,6,6> mass_mtrx);
+    Matrix<float,6,6> coriolis_matrix(VectorXf cur_state);
+    Matrix<float,12,12> A_state_matrix(VectorXf cur_state);
+    Matrix<float,12,6> B_state_matrix();
+
 };
 
 

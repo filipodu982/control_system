@@ -59,7 +59,7 @@ Matrix3f ROV::Smtrx(Eigen::Vector3f r) {
     return mtrx;
 }
 
-Matrix<float, 6, 6> ROV::coriolis_matrix(VectorXf cur_state, Matrix<float, 6, 6> mass_mtrx) {
+Matrix<float, 6, 6> ROV::coriolis_matrix(VectorXf cur_state) {
     Matrix<float,6,6> Crb;
     Matrix<float,6,1> speed;
     Matrix3f M11, M12, M21, M22;
@@ -69,17 +69,41 @@ Matrix<float, 6, 6> ROV::coriolis_matrix(VectorXf cur_state, Matrix<float, 6, 6>
     nu1 = speed.block(0,0,3,1);
     nu2 = speed.block(3,0,3,1);
 
-    mass_mtrx = 0.5*(mass_mtrx * mass_mtrx.transpose());
-    M11 = mass_mtrx.topLeftCorner(3,3);
-    M12 = mass_mtrx.topRightCorner(3,3);
-    M21 = mass_mtrx.bottomLeftCorner(3,3);
-    M22 = mass_mtrx.bottomRightCorner(3,3);
+    Mrb = 0.5*(Mrb * Mrb.transpose());
+    M11 = Mrb.topLeftCorner(3,3);
+    M12 = Mrb.topRightCorner(3,3);
+    M21 = Mrb.bottomLeftCorner(3,3);
+    M22 = Mrb.bottomRightCorner(3,3);
 
     Crb << Matrix3f::Zero(3,3), -Smtrx(M11*nu1 + M12*nu2),
             -Smtrx(M11*nu1 + M12*nu2), -Smtrx(M21*nu1 + M22*nu2);
-    std::cout<<speed<<std::endl;
-
-
-
+    std::cout<<Crb<<std::endl;
     return Crb;
+}
+
+Matrix<float, 12, 12> ROV::A_state_matrix(VectorXf cur_state) {
+    Matrix<float,12,12> A = MatrixXf::Zero(12,12);
+    Matrix<float,6,1> speed = MatrixXf::Zero(6,1);
+    Matrix<float,6,6> damping_coeffs = MatrixXf::Zero(6,6);
+    MatrixXf speed_diag = MatrixXf::Zero(6,6);
+
+    speed = cur_state.block(6,0,6,1);
+    speed_diag = speed.asDiagonal();
+    damping_coeffs = Dnl * speed_diag + coriolis_matrix(cur_state) + Dl;
+    damping_coeffs = -Mrb.inverse() * damping_coeffs;
+    std::cout<<damping_coeffs<<std::endl;
+    A << MatrixXf::Zero(6,6), MatrixXf::Zero(6,6),
+        MatrixXf::Zero(6,6), damping_coeffs;
+    std::cout<<A<<std::endl;
+    return A;
+
+
+
+}
+
+Matrix<float, 12, 6> ROV::B_state_matrix() {
+    Matrix<float, 12,6> B = MatrixXf::Zero(12,6);
+    B.block(6,0,6,6) = Mrb.inverse();
+    std::cout<<B<<std::endl;
+    return Matrix<float, 12, 6>();
 }
