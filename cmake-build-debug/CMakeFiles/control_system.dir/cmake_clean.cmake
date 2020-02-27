@@ -1,10 +1,8 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/control_system.dir/ROV.cpp.obj"
-  "CMakeFiles/control_system.dir/main.cpp.obj"
-  "control_system.exe"
-  "control_system.exe.manifest"
+  "CMakeFiles/control_system.dir/ROV.cpp.o"
+  "CMakeFiles/control_system.dir/main.cpp.o"
+  "control_system"
   "control_system.pdb"
-  "libcontrol_system.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.

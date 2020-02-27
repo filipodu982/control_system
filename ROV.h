@@ -13,36 +13,36 @@ private:
 
     // Mass and inertia moments
     int m;
-    float Ix, Iy, Iz;
-    float Ixy, Iyx, Ixz, Izx, Iyz, Izy;
-    Matrix3f Ib = Matrix3f::Zero(3,3);
+    double Ix, Iy, Iz;
+    double Ixy, Iyx, Ixz, Izx, Iyz, Izy;
+    Matrix3d Ib = Matrix3d::Zero(3,3);
 
     //Center of Gravity
-    Vector3f rg;
+    Vector3d rg;
 
     //MRB
-    Matrix<float,6,6> Mrb;
+    Matrix<double,6,6> Mrb;
 
     //Coeffs. of drag
-    float Xu,Yv,Zw,Kp,Mq,Nr;
-    float Xuu, Yvv, Zww, Kpp, Mqq, Nrr;
-    VectorXf vl = VectorXf::Zero(6);
-    VectorXf vnl = VectorXf::Zero(6);
+    double Xu,Yv,Zw,Kp,Mq,Nr;
+    double Xuu, Yvv, Zww, Kpp, Mqq, Nrr;
+    VectorXd vl = VectorXd::Zero(6);
+    VectorXd vnl = VectorXd::Zero(6);
 
-    MatrixXf Dl = MatrixXf::Zero(6,6);
-    MatrixXf Dnl = MatrixXf::Zero(6,6);
+    MatrixXd Dl = MatrixXd::Zero(6,6);
+    MatrixXd Dnl = MatrixXd::Zero(6,6);
 
 
 
-    static Matrix3f Smtrx(Vector3f r);
+    static Matrix3d Smtrx(Vector3d r);
 
 public:
     ROV();
     void print_params();
-    VectorXf states = VectorXf::Zero(12);
-    Matrix<float,6,6> coriolis_matrix(VectorXf cur_state);
-    Matrix<float,12,12> A_state_matrix(VectorXf cur_state);
-    Matrix<float,12,6> B_state_matrix();
+    VectorXd states = VectorXd::Zero(12);
+    Matrix<double,6,6> coriolis_matrix(VectorXd cur_state);
+    Matrix<double,12,12> A_state_matrix(VectorXd cur_state);
+    Matrix<double,12,6> B_state_matrix();
 
 };
 

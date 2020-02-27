@@ -1,3 +1,1 @@
-"D:\CLion 2019.3.4\bin\cmake\win\bin\cmake.exe" -E remove -f CMakeFiles\control_system.dir/objects.a
-C:\MinGW\bin\ar.exe cr CMakeFiles\control_system.dir/objects.a @CMakeFiles\control_system.dir\objects1.rsp
-C:\MinGW\bin\g++.exe -g   -Wl,--whole-archive CMakeFiles\control_system.dir/objects.a -Wl,--no-whole-archive  -o control_system.exe -Wl,--out-implib,libcontrol_system.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\control_system.dir\linklibs.rsp
+/usr/bin/g++  -g   CMakeFiles/control_system.dir/main.cpp.o CMakeFiles/control_system.dir/ROV.cpp.o  -o control_system 
