@@ -6,5 +6,5 @@ CXX_FLAGS = -g   -std=gnu++1z
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = 
+CXX_INCLUDES = -I/home/filip/Desktop/control-system/src/control-toolbox/ct_optcon/include -I/home/filip/Desktop/control-system/Eigen -I/home/filip/Desktop/control-system/ct/core -I/home/filip/Desktop/control-system/optcon 
 
