@@ -1,0 +1,12 @@
+weź rozbij tego konstruktora na funkcje i żeby konstruktor je tylko wywoływał xd
+funkcje prywatne
+bo ten konstruktor wygląda jak nieszczęście
+oookej
+bo można zrobić overload konstruktora
+i np. wywoływać go z różnymi parametrami
+o
+no no
+zobacz sobie przeładowanie funkcji
+okej
+wiem co to
+function overload

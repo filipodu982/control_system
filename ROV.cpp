@@ -6,43 +6,8 @@
 #include "ROV.h"
 
 ROV::ROV(){
-    //Inertia moments
-    Ix = 0.3; Iy = 0.3; Iz = 0.3;
-    Ixy=0; Iyx=0; Ixz=0; Izx=0; Iyz=0; Izy=0;
-
-    Ib << Ix, -Ixy, -Ixz,
-            -Iyx, Iy, -Iyz,
-            -Izx, -Izy, Iz;
-
-    //Mass
-    m = 19;
-    //Location of CoG in relation to Center of Origin of axes. It is set to 0.02 in z as it is located at Center of Buoy.
-    rg << 0,0,0.02;
-
-    Mrb.block(0,0,3,3) = m*Matrix3d::Identity(3,3);
-    Mrb.block(0,3,3,3) = -m*Smtrx(rg);
-    Mrb.block(3,0,3,3) = m*Smtrx(rg);
-    Mrb.block(3,3,3,3) = Ib;
-
-    //Coeffs. of drag
-        Xu = -4.03;
-        Yv = -6.22;
-        Zw = 5.18;
-        Kp = -0.07;
-        Mq = -0.07;
-        Nr = -0.07;
-
-        Xuu = -18.18;
-        Yvv = -21.66;
-        Zww = 36.99;
-        Kpp = -1.55;
-        Mqq = -1.55;
-        Nrr = -1.55;
-
-        vl << Xu,Yv,Zw,Kp,Mq,Nr;
-        vnl << Xuu,Yvv,Zww,Kpp,Mqq,Nrr;
-        Dl = vl.asDiagonal();
-        Dnl = vnl.asDiagonal();
+    init_geometry();
+    init_drag();
 }
 
 
@@ -57,6 +22,52 @@ Matrix3d ROV::Smtrx(Eigen::Vector3d r) {
     r(2), 0, -r(0),
     -r(1), r(0), 0;
     return mtrx;
+}
+
+void ROV::init_geometry(){
+    //Inertia moments
+    Ix = 0.3; Iy = 0.3; Iz = 0.3;
+    Ixy=0; Iyx=0; Ixz=0; Izx=0; Iyz=0; Izy=0;
+
+    //Moments of inertia matrix
+    Ib << Ix, -Ixy, -Ixz,
+            -Iyx, Iy, -Iyz,
+            -Izx, -Izy, Iz;
+
+    //Mass
+    m = 19;
+    //Location of CoG in relation to Center of Origin of axes. It is set to 0.02 in z as it is located at Center of Buoy.
+    rg << 0,0,0.02;
+
+    Mrb.block(0,0,3,3) = m*Matrix3d::Identity(3,3);
+    Mrb.block(0,3,3,3) = -m*Smtrx(rg);
+    Mrb.block(3,0,3,3) = m*Smtrx(rg);
+    Mrb.block(3,3,3,3) = Ib;
+
+}
+
+void ROV::init_drag(){
+    //Coeffs. of linear drag
+        Xu = -4.03;
+        Yv = -6.22;
+        Zw = 5.18;
+        Kp = -0.07;
+        Mq = -0.07;
+        Nr = -0.07;
+
+    //Coeffs. of quadratic drag
+        Xuu = -18.18;
+        Yvv = -21.66;
+        Zww = 36.99;
+        Kpp = -1.55;
+        Mqq = -1.55;
+        Nrr = -1.55;
+
+    //Creating diagonal matrices
+        vl << Xu,Yv,Zw,Kp,Mq,Nr;
+        vnl << Xuu,Yvv,Zww,Kpp,Mqq,Nrr;
+        Dl = vl.asDiagonal();
+        Dnl = vnl.asDiagonal();
 }
 
 Matrix<double, 6, 6> ROV::coriolis_matrix(VectorXd cur_state) {

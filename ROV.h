@@ -28,13 +28,16 @@ private:
     double Xuu, Yvv, Zww, Kpp, Mqq, Nrr;
     VectorXd vl = VectorXd::Zero(6);
     VectorXd vnl = VectorXd::Zero(6);
-
+    
+    //Diagonal matrices of coeffs
     MatrixXd Dl = MatrixXd::Zero(6,6);
     MatrixXd Dnl = MatrixXd::Zero(6,6);
 
 
 
-    static Matrix3d Smtrx(Vector3d r);
+    static Matrix3d Smtrx(Vector3d r);  //Function creating a special kind of matrix
+    void init_geometry();               //Initializing mass, inertia moments, rg
+    void init_drag();                   //initializing drag matrices 
 
 public:
     ROV();
