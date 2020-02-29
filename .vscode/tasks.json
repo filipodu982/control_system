@@ -12,7 +12,8 @@
             "type": "shell",
             "command": "",
             "args": [
-                "g++","-g", "*.cpp", "-o","${fileBasenameNoExtension}.out","liblapack.a", "&&", "clear" , "&&" , "./${fileBasenameNoExtension}.out"
+              //  "g++","-g", "*.cpp", "-o","${fileBasenameNoExtension}.out","liblapack.a", "&&", "clear" , "&&" , "./${fileBasenameNoExtension}.out"
+              "cd","control-system-build","&&","cmake","..","&&","cmake","--build",".","&&","./control_system"
             ],
             "group": {
                 "kind": "build",

@@ -29,7 +29,6 @@ int main() {
     MatrixXd R = MatrixXd::Random(6,6);
 
     lqrSolver.compute(Q,R,A,B,K);
-    std::cout<<K<<std::endl;
-    std::cout<<"KURWA SUKCES"<<std::endl;
+    std::cout<<"Macierz K\n"<<K<<std::endl;
     return 0;
 }

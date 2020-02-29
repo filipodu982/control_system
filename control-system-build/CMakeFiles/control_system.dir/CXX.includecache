@@ -1052,14 +1052,6 @@ lapacke_mangling.h
 
 /home/filip/Desktop/control-system/Eigen/src/plugins/MatrixCwiseUnaryOps.h
 
-/home/filip/Desktop/control-system/ROV.cpp
-iostream
--
-Eigen/Dense
-/home/filip/Desktop/control-system/Eigen/Dense
-ROV.h
-/home/filip/Desktop/control-system/ROV.h
-
 /home/filip/Desktop/control-system/ROV.h
 Eigen/Dense
 /home/filip/Desktop/control-system/Eigen/Dense
