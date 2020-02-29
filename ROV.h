@@ -40,9 +40,8 @@ private:
     void init_drag();                   //initializing drag matrices 
 
 public:
-    ROV();
-    void print_params();
-    VectorXd states = VectorXd::Zero(12);
+    ROV();                                                   //Constructor initializing variables
+   // VectorXd states = VectorXd::Zero(12);
     Matrix<double,6,6> coriolis_matrix(VectorXd cur_state);
     Matrix<double,12,12> A_state_matrix(VectorXd cur_state);
     Matrix<double,12,6> B_state_matrix();
