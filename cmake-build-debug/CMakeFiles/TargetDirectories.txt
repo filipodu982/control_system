@@ -1,3 +1,0 @@
-/home/filip/Desktop/control-system/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/filip/Desktop/control-system/cmake-build-debug/CMakeFiles/control_system.dir
-/home/filip/Desktop/control-system/cmake-build-debug/CMakeFiles/edit_cache.dir

@@ -77,7 +77,7 @@ Matrix<double, 6, 6> ROV::coriolis_matrix(VectorXd cur_state) {
 
     Crb << Matrix3d::Zero(3,3), -Smtrx(M11*nu1 + M12*nu2),
             -Smtrx(M11*nu1 + M12*nu2), -Smtrx(M21*nu1 + M22*nu2);
-    std::cout<<Crb<<std::endl;
+    //std::cout<<Crb<<std::endl;
     return Crb;
 }
 
@@ -91,10 +91,10 @@ Matrix<double, 12, 12> ROV::A_state_matrix(VectorXd cur_state) {
     speed_diag = speed.asDiagonal();
     damping_coeffs = Dnl * speed_diag + coriolis_matrix(cur_state) + Dl;
     damping_coeffs = -Mrb.inverse() * damping_coeffs;
-    std::cout<<damping_coeffs<<std::endl;
+    //std::cout<<damping_coeffs<<std::endl;
     A << MatrixXd::Zero(6,6), MatrixXd::Zero(6,6),
         MatrixXd::Zero(6,6), damping_coeffs;
-    std::cout<<A<<std::endl;
+    //std::cout<<A<<std::endl;
     return A;
 
 
@@ -104,6 +104,6 @@ Matrix<double, 12, 12> ROV::A_state_matrix(VectorXd cur_state) {
 Matrix<double, 12, 6> ROV::B_state_matrix() {
     Matrix<double, 12,6> B = MatrixXd::Zero(12,6);
     B.block(6,0,6,6) = Mrb.inverse();
-    std::cout<<B<<std::endl;
+    //std::cout<<B<<std::endl;
     return B;
 }

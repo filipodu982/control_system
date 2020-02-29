@@ -1,7 +1,7 @@
 #include <iostream>
 #include "ROV.h"
 #include "Eigen/Core"
-#include "optcon/optcon.h"
+#include <ct/optcon/optcon.h>
 
 #include "Eigen/Dense"
 using namespace Eigen;
@@ -29,7 +29,7 @@ int main() {
     MatrixXd R = MatrixXd::Random(6,6);
 
     lqrSolver.compute(Q,R,A,B,K);
-
-    //std::cout << robot.Smtrx(vec) << std::endl;
+    std::cout<<K<<std::endl;
+    std::cout<<"KURWA SUKCES"<<std::endl;
     return 0;
 }
