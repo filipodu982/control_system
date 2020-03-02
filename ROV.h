@@ -17,6 +17,17 @@ private:
     double Ixy, Iyx, Ixz, Izx, Iyz, Izy;
     Matrix3d Ib = Matrix3d::Zero(3,3);
 
+    //Thrust configuration matrix;
+    MatrixXd T = MatrixXd::Zero(6,5);
+    VectorXd t1 = VectorXd::Zero(6,1);
+    VectorXd t2 = VectorXd::Zero(6,1);
+    VectorXd t3 = VectorXd::Zero(6,1);
+    VectorXd t4 = VectorXd::Zero(6,1);
+    VectorXd t5 = VectorXd::Zero(6,1);
+
+    double alpha01;
+    double alpha02;
+
     //Center of Gravity
     Vector3d rg;
 
@@ -38,6 +49,7 @@ private:
     static Matrix3d Smtrx(Vector3d r);  //Function creating a special kind of matrix
     void init_geometry();               //Initializing mass, inertia moments, rg
     void init_drag();                   //initializing drag matrices 
+    void init_thrust();
 
 public:
     ROV();                                                   //Constructor initializing variables
@@ -45,7 +57,6 @@ public:
     Matrix<double,6,6> coriolis_matrix(VectorXd cur_state);
     Matrix<double,12,12> A_state_matrix(VectorXd cur_state);
     Matrix<double,12,6> B_state_matrix();
-
 };
 
 

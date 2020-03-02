@@ -4,11 +4,13 @@
 #include <iostream>
 #include "Eigen/Dense"
 #include "ROV.h"
+#include <math.h>
 
 //Constructor initializing variables
 ROV::ROV(){
     init_geometry();
     init_drag();
+    init_thrust();
 }
 
 
@@ -69,6 +71,23 @@ void ROV::init_drag(){
         vnl << Xuu,Yvv,Zww,Kpp,Mqq,Nrr;
         Dl = vl.asDiagonal();
         Dnl = vnl.asDiagonal();
+}
+
+//Initializing thrust configuration matrix
+void ROV::init_thrust(){
+    alpha01 = 0;
+    alpha02 = 0;
+
+    t1 << cos(alpha01),sin(alpha01),0,0,0,(sin(alpha01) * (-0.04)) - (cos(alpha01) * (-0.08));
+    t2 << cos(alpha02),sin(alpha02),0,0,0,(sin(alpha02) * (-0.04)) - (cos(alpha02) * (0.08));
+    t3 << 0,0,1,-0.11,-0.14,0;
+    t4 << 0,0,-1,-0.11,0.14,0;
+    t5 << 0,0,1,0,0.23,0;
+
+
+    T << t1,t2,t3,t4,t5;
+    std::cout<< T <<std::endl;
+
 }
 
 

@@ -1064,15 +1064,3 @@ ROV.h
 Eigen/Dense
 /home/filip/Desktop/control-system/Eigen/Dense
 
-/home/filip/Desktop/control-system/main.cpp
-iostream
--
-ROV.h
-/home/filip/Desktop/control-system/ROV.h
-Eigen/Core
-/home/filip/Desktop/control-system/Eigen/Core
-ct/optcon/optcon.h
--
-Eigen/Dense
-/home/filip/Desktop/control-system/Eigen/Dense
-

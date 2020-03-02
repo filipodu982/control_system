@@ -1,4 +1,5 @@
 #include <iostream>
+#include <math.h>
 #include "ROV.h"
 #include "Eigen/Core"
 #include <ct/optcon/optcon.h>
@@ -33,6 +34,6 @@ int main() {
 
     //Computing K matrix
     lqrSolver.compute(Q,R,A,B,K);
-    std::cout<<"Macierz K\n"<<K<<std::endl;
+    //std::cout<<"Macierz K\n"<<K<<std::endl;
     return 0;
 }
