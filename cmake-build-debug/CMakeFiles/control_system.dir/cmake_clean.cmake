@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/control_system.dir/EigenQP.cpp.o"
   "CMakeFiles/control_system.dir/ROV.cpp.o"
   "CMakeFiles/control_system.dir/main.cpp.o"
   "control_system"

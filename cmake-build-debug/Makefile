@@ -123,6 +123,33 @@ control_system/fast:
 	$(MAKE) -f CMakeFiles/control_system.dir/build.make CMakeFiles/control_system.dir/build
 .PHONY : control_system/fast
 
+EigenQP.o: EigenQP.cpp.o
+
+.PHONY : EigenQP.o
+
+# target to build an object file
+EigenQP.cpp.o:
+	$(MAKE) -f CMakeFiles/control_system.dir/build.make CMakeFiles/control_system.dir/EigenQP.cpp.o
+.PHONY : EigenQP.cpp.o
+
+EigenQP.i: EigenQP.cpp.i
+
+.PHONY : EigenQP.i
+
+# target to preprocess a source file
+EigenQP.cpp.i:
+	$(MAKE) -f CMakeFiles/control_system.dir/build.make CMakeFiles/control_system.dir/EigenQP.cpp.i
+.PHONY : EigenQP.cpp.i
+
+EigenQP.s: EigenQP.cpp.s
+
+.PHONY : EigenQP.s
+
+# target to generate assembly for a file
+EigenQP.cpp.s:
+	$(MAKE) -f CMakeFiles/control_system.dir/build.make CMakeFiles/control_system.dir/EigenQP.cpp.s
+.PHONY : EigenQP.cpp.s
+
 ROV.o: ROV.cpp.o
 
 .PHONY : ROV.o
@@ -186,6 +213,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... control_system"
 	@echo "... edit_cache"
+	@echo "... EigenQP.o"
+	@echo "... EigenQP.i"
+	@echo "... EigenQP.s"
 	@echo "... ROV.o"
 	@echo "... ROV.i"
 	@echo "... ROV.s"

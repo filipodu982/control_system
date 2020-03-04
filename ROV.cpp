@@ -4,7 +4,8 @@
 #include <iostream>
 #include "Eigen/Dense"
 #include "ROV.h"
-#include <math.h>
+#include <cmath>
+#include <EigenQP.h>
 
 //Constructor initializing variables
 ROV::ROV(){
@@ -86,7 +87,6 @@ void ROV::init_thrust(){
 
 
     T << t1,t2,t3,t4,t5;
-    std::cout<< T <<std::endl;
 
 }
 
@@ -159,4 +159,144 @@ Matrix<double, 12, 6> ROV::B_state_matrix() {
     Matrix<double, 12,6> B = MatrixXd::Zero(12,6);
     B.block(6,0,6,6) = Mrb.inverse();
     return B;
+}
+
+void ROV::thrust_allocation(VectorXd tau) {
+    //Initializing thrust conf. matrix for azimuthal thrusters
+    MatrixXd T1(3,1);
+    MatrixXd T2(3,1);
+    MatrixXd T_azimuth(3,2);    //Thrust conf. matrix for 2 azimuthal thrusters, including only x,y,yaw forces
+    VectorXd tau_desired(3,1);  //Vector of desired forces  and moments: x,y,yaw
+    T1 << t1(0), t1(1), t1(5);  //t1 and t2 are global thrust conf. matrices including sin and cos
+    T2 << t2(0), t2(1), t2(5);
+    T_azimuth << T1,T2;
+
+    tau_desired << tau(0), tau(1), tau(5);
+
+
+    //Constraints
+    double delta_a = 0.01;      //Speed of servo - the angle which it turns by in 1 timestep
+
+    double u_min = -0.4;        //delta u which means how fast the force can grow in 1 timestep
+    double u_max = 0.4;
+
+    //Cost matrices for quad prog
+    VectorXd Q(3);      //Penalizing the difference between desired tau and generated one
+    VectorXd Om(2);     //Penalizing too fast turn rate - not really important
+    VectorXd W(2);      //Penalizing the power consumption of motors. Not really important as it's taken care of in LQR
+    Q << 100,100,100;
+    Om << 1, 1;
+    W << 300,300;
+
+    //Diagonal matrix H which is main matrix in quadprog problem. x^T * H * X + f*X
+    VectorXd diag_H(7);
+    diag_H << 2*W, 2*Q, 2*Om;
+    MatrixXd H = MatrixXd::Zero(7,7);
+    H = diag_H.asDiagonal();
+
+    //Vector of linearity in quadprog as seen before
+    VectorXd f = VectorXd::Zero(7);
+
+
+    //Calculating derivatives for linearization
+    MatrixXd da1 = MatrixXd::Zero(3,1);
+    MatrixXd da2 = MatrixXd::Zero(3,1);
+    MatrixXd diff_T = MatrixXd::Zero(3,2);
+
+    //First and second azimuthal thruster. Below are calculated derivatives of thrust. conf. matrices
+    da1 << -sin(alpha01) * u(0), cos(alpha01) * u(0), ((-0.08*sin(alpha01)) - (0.04 * cos(alpha01))) * u(0);
+    da2 << -sin(alpha02) * u(1), cos(alpha02) * u(1), ((0.08*sin(alpha02)) - (0.04 * cos(alpha02))) * u(1);
+
+    diff_T << da1,da2;
+
+
+    //Equality constraints for QP
+    //In Matlab there is only Aeq and beq. Here I need to pass Aeq^T to the function so I calculate it's transpose
+    MatrixXd Aeq = MatrixXd::Zero(7,3);
+    MatrixXd temp_Aeq = MatrixXd::Zero(3,7);    //Matrix which looks identical to that one from Matlab
+
+    temp_Aeq.block(0,0,3,2) = T_azimuth;
+    Vector3d v_diag(1,1,1);
+    temp_Aeq.block(0,2,3,3) = v_diag.asDiagonal();
+    temp_Aeq.block(0,5,3,2) = diff_T;
+
+    Aeq = temp_Aeq.transpose();
+
+    //Also the same as Matlab
+    MatrixXd Beq;
+    Beq = -(tau_desired - (T_azimuth * u.block(0,0,2,1)));
+
+    //Inequality constraints
+    //I need to specify lower and upper bounds for the variables
+    //The difference between Matlab and this library is that in matlab the function looks like
+    //lb < x < ub
+    //Here it looks like
+    //Ci^T * X + ci0 >= 0
+    //So I needed to create a matrix Ci which gives vector of both +-u, +-s, +-alpha
+    //And ci0 vector which corresponds to proper values of bounds
+    MatrixXd Lb = MatrixXd::Zero(7,7);
+    MatrixXd Ub = MatrixXd::Zero(7,7);
+    VectorXd vec_ones(7);
+    //The same as in Aeq - I pass tranposed version of matrix so I need to create temp_Ci matrix
+    MatrixXd Ci = MatrixXd::Zero(7,14);
+    MatrixXd temp_Ci = MatrixXd::Zero(14,7);
+    VectorXd ci0 = VectorXd::Zero(14,1);
+    vec_ones << 1,1,0,0,0,1,1;  //u,u,s,s,s,a,a
+    Lb = vec_ones.asDiagonal(); //Lower bound
+    Ub = -Lb;                   //Upper bound
+    temp_Ci << Lb,Ub;
+    Ci = temp_Ci.transpose();
+
+    ci0 << -u_min, -u_min, 0,0,0,delta_a,delta_a,u_max, u_max,0,0,0,delta_a,delta_a; //Vector of bound valuses
+
+    VectorXd x = VectorXd::Random(7); //Initializing solution vector
+
+    //Solving and printing quadprog
+    std::cout << "Solve quadprog:" << QP::solve_quadprog(H,f,Aeq,Beq,Ci,ci0,x) << std::endl;
+    std::cout << "x= " << std::endl << x << std::endl;
+
+    u(0) += x(0);   //Adding values of calculated change in force
+    u(1) += x(1);
+
+    alpha01 += x(5);      //And calculated change in servo angle
+    alpha02 += x(6);
+
+
+    //Classical THRUST ALLOCATION
+    //Here I solve thrust allocation problem in classical way for forces in z,roll,pitch, for other 3 thrusters
+    MatrixXd Thrust_conf(6,3);  //Matrix for only 3 thrusters
+    MatrixXd Thrust_conf_inv;         //Its pseudoinverse
+    Thrust_conf << t3,t4,t5;
+    Thrust_conf_inv = Thrust_conf.completeOrthogonalDecomposition().pseudoInverse();
+
+    //Matrix of maximum values of thrust force
+    Vector3d diag_K(40,40,40);
+    Matrix3d K;
+    K = diag_K.asDiagonal();
+
+    //Desired tau for this thrust allocation
+    VectorXd tau_c(6);
+    tau_c << 0,0,tau(2),tau(3),tau(4),0;
+
+    //Final calculated vector of control signal
+    Vector3d u2;
+    u2 = K.inverse() * Thrust_conf_inv * tau_c;
+
+    //Making sure that we cannot demand 110% of power
+    for(int i =0; i<=2; i++){
+        if(u(i) > 1){
+            u(i) = 1;
+        } else if (u(i) < -1){
+            u(i) = -1;
+        }
+    }
+
+    //Final vector u which is vector of all control signals for all thrusters
+    u(2) = u2(0);
+    u(3) = u2(1);
+    u(4) = u2(2);
+
+    std::cout << "Alpha 01: " << alpha01 << " alpha 02: " << alpha02 << std::endl;
+    std::cout << "u = " << u << std::endl;
+
 }

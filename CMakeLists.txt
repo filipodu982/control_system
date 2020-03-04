@@ -10,6 +10,6 @@ include_directories(ct/optcon)
 include_directories(/usr/local/lib)
 add_definitions(-DCT_USE_LAPACK)
 
-add_executable(control_system main.cpp ROV.cpp ROV.h)
+add_executable(control_system main.cpp ROV.cpp EigenQP.cpp ROV.h)
 target_link_libraries(control_system LINK_PUBLIC lapack)
 target_link_libraries(control_system LINK_PUBLIC blas)

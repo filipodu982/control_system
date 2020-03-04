@@ -96,6 +96,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/filip/Desktop/control-system/EigenQP.cpp">
+			<Option target="control_system"/>
+		</Unit>
 		<Unit filename="/home/filip/Desktop/control-system/ROV.cpp">
 			<Option target="control_system"/>
 		</Unit>
