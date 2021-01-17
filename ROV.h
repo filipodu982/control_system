@@ -26,6 +26,8 @@ private:
     VectorXd t5 = VectorXd::Zero(6,1);
     VectorXd u = VectorXd::Zero(5,1);
 
+    MatrixXd K = MatrixXd::Zero(5,1);
+
     double alpha01;
     double alpha02;
 
@@ -59,6 +61,7 @@ public:
     Matrix<double,12,12> A_state_matrix(VectorXd cur_state);
     Matrix<double,12,6> B_state_matrix();
     void thrust_allocation(VectorXd tau);
+    VectorXd getFutureState(VectorXd currentState, Matrix<double,12,12> A, Matrix<double,12,6> B, VectorXd u);
 };
 
 

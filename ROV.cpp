@@ -85,6 +85,9 @@ void ROV::init_thrust(){
     t4 << 0,0,-1,-0.11,0.14,0;
     t5 << 0,0,1,0,0.23,0;
 
+    Eigen::VectorXd KDiag(5);
+    KDiag << 40,40,40,40,40;
+    K = KDiag.asDiagonal();
 
     T << t1,t2,t3,t4,t5;
 
@@ -141,7 +144,7 @@ Matrix<double, 12, 12> ROV::A_state_matrix(VectorXd cur_state) {
     damping_coeffs = -Mrb.inverse() * damping_coeffs;
 
     //State Space matrix
-    A << MatrixXd::Zero(6,6), MatrixXd::Zero(6,6),
+    A << MatrixXd::Zero(6,6), MatrixXd::Identity(6,6),
         MatrixXd::Zero(6,6), damping_coeffs;
 
     return A;
@@ -299,4 +302,10 @@ void ROV::thrust_allocation(VectorXd tau) {
     std::cout << "Alpha 01: " << alpha01 << " alpha 02: " << alpha02 << std::endl;
     std::cout << "u = " << u << std::endl;
 
+}
+
+VectorXd ROV::getFutureState(VectorXd currentState, Matrix<double,12,12> A, Matrix<double,12,6> B, VectorXd u)
+{
+    VectorXd tau = T*K*u;
+    return A*currentState + B*tau;
 }
